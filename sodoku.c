@@ -1,10 +1,10 @@
 /*
  ============================================================================
- Name        : sodoku.c
+ Name        : HelloC.c
  Author      : Richard Friedman
  Version     :
- Copyright   : all rights reserved
- Description :sodoku solver  in C, Ansi-style
+ Copyright   : my shit
+ Description : Hello World in C, Ansi-style
  ============================================================================
  */
 
@@ -17,8 +17,15 @@ struct node{
     struct node *prev;
     struct node *next;
 };
+struct list{
+	struct node *data;
+	struct list *prev;
+	struct list *next;
+};
+
 struct node *L1,*L2,*L3;
 
+int i = sizeof(L1);
 
 int cnt;
 int val;
@@ -27,6 +34,7 @@ void AddNode(struct node **head, int position, int value);
 void PrintList(struct node ** head);
 void FillZ(struct node ** head);
 int CompareValue(int val, int pos, struct node **head);
+void AddList(struct node **head, struct list **block);
 
 int main(void) {
 	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
@@ -40,6 +48,7 @@ int main(void) {
 
 	}FillZ(&L1);
 	PrintList(&L1);
+	i = sizeof(L1);
 /*
 	for(cnt=1;cnt<=9;cnt++){
 		printf("\n Enter Value for Block A position %d:  ",cnt);
@@ -114,6 +123,46 @@ void AddNode(struct node **head, int position, int value)
         newNode->prev = temp;
         temp->next->prev = newNode;
         temp->next = newNode;
+        return;
+    }
+}
+
+void AddList(struct node **head, struct list **block)
+{
+    int currentNodePosition=1;
+    struct node *temp, *temp2, *newNode;
+    int size =0;
+
+    temp=*head;
+    temp2=*block;
+    if(*head == NULL || *block == NULL)
+    {
+        printf("\nList Empty.");
+
+    }
+
+
+while(temp->next !=NULL)
+	size++;
+
+	newNode = (struct node *)malloc(sizeof(struct node))*size;
+
+    if(!newNode)
+    {
+        printf("\nError while allocating memory to new Node");
+        return;
+    }
+
+
+    if(temp2->next==NULL)
+    {
+        printf("\nInserting node at the last.");
+        newNode->next = temp2->next;
+        newNode->prev = temp2;
+        temp2->next = newNode;
+    }
+    else
+    {
         return;
     }
 }
