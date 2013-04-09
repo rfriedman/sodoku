@@ -1,10 +1,10 @@
 /*
  ============================================================================
- Name        : HelloC.c
+ Name        : sodoku.c
  Author      : Richard Friedman
  Version     :
- Copyright   : my shit
- Description : Hello World in C, Ansi-style
+ Copyright   : 
+ Description :sodoku solver in C, Ansi-style
  ============================================================================
  */
 
@@ -24,7 +24,7 @@ struct list{
 };
 
 struct node *L1,*L2,*L3;
-
+struct list *B1;
 int i = sizeof(L1);
 
 int cnt;
@@ -40,6 +40,7 @@ int main(void) {
 	puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
 
 	L1=L2=L3=NULL;
+	B1=NULL;
 	for(cnt=1;cnt<=9;cnt++){
 //		printf("\n Enter Value for Block A position %d:  ",cnt);
 //		scanf("%d",&val);
@@ -48,6 +49,8 @@ int main(void) {
 
 	}FillZ(&L1);
 	PrintList(&L1);
+	AddList(&L1,&B1);
+
 	i = sizeof(L1);
 /*
 	for(cnt=1;cnt<=9;cnt++){
@@ -69,7 +72,10 @@ int main(void) {
 	PrintList(&L3);
 
 */
-
+	free(L1);
+	free(L2);
+	free(L3);
+	free(B1);
 	return EXIT_SUCCESS;
 }
 
@@ -129,42 +135,72 @@ void AddNode(struct node **head, int position, int value)
 
 void AddList(struct node **head, struct list **block)
 {
-    int currentNodePosition=1;
-    struct node *temp, *temp2, *newNode;
-    int size =0;
+
+    struct node *temp, *newNode;
+    struct list *temp2, *newList;
+    int position;
+
 
     temp=*head;
     temp2=*block;
     if(*head == NULL || *block == NULL)
     {
         printf("\nList Empty.");
+        position = 1;
 
     }
 
 
-while(temp->next !=NULL)
-	size++;
 
-	newNode = (struct node *)malloc(sizeof(struct node))*size;
+	newList = (struct list *)malloc(sizeof(struct list));
 
-    if(!newNode)
+    if(!newList)
     {
         printf("\nError while allocating memory to new Node");
         return;
     }
 
+    if(position==1)
+       {
+           printf("\nInserting node at the beginning of the list");
+           newList->next = * block;
+           newList->prev = NULL;
+           //*head->prev = newNode;
+           *block = newList;
 
+       }
+
+    temp2=*block;
     if(temp2->next==NULL)
     {
         printf("\nInserting node at the last.");
-        newNode->next = temp2->next;
-        newNode->prev = temp2;
-        temp2->next = newNode;
+        newList->next = temp2->next;
+        newList->prev = temp2;
+        temp2->next = newList;
     }
     else
     {
         return;
     }
+    int cnt = 1;
+    temp2->data=NULL;
+    struct node *print;
+    print = temp;
+    PrintList(&print);
+    while(temp->next != NULL)
+    {
+    	AddNode(&temp2->data,cnt,temp->data);
+    	cnt++;
+    	temp=temp->next;
+    	/*
+    	newNode = (struct node *)malloc(sizeof(struct node));
+    	newNode->data = temp->data;
+    	newNode->next = temp2->data->next;
+    	newNode->prev = temp2->data;
+    	temp2->data->next=newNode;
+    	*/
+    }
+
 }
 
 
